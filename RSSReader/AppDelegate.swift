@@ -7,15 +7,29 @@
 //
 
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    lazy var stack = CoreDataStack();
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        var navigation = self.window!.rootViewController as UINavigationController;
+        
+        var viewController = navigation.topViewController as FeedTableViewController;
+        
+        viewController.context = stack.context;
+        
+        UINavigationBar.appearance().barTintColor = UIColor.brownColor();
+        UINavigationBar.appearance().tintColor = UIColor.whiteColor();
+        
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()];
+        
         return true
     }
 
@@ -27,6 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        stack.saveContext();
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
@@ -39,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        stack.saveContext();
     }
 
 
